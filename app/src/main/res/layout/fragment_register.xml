@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".userinterface.fragments.RegisterFragment">
+
+    <!-- TODO: Update blank fragment layout -->
+
+    <FrameLayout
+        android:id="@+id/register_fragment"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <ImageButton
+            android:id="@+id/register_fragment_bt"
+            android:layout_width="214dp"
+            android:layout_height="70dp"
+            android:layout_marginTop="5dp"
+            android:adjustViewBounds="true"
+            android:background="#FFFFFF"
+            android:scaleType="fitStart"
+            android:src="@drawable/aqkw"/>
+
+        <TextView
+            android:id="@+id/textView8"
+
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="350dp"
+            android:background="#FADCDC"
+            android:clickable="false"
+            android:paddingTop="15dp"
+            android:text="REGISTER HERE"
+            android:textAlignment="center"
+            android:textSize="30sp"
+            android:textStyle="bold" />
+
+    </FrameLayout>
+
+
+</FrameLayout>

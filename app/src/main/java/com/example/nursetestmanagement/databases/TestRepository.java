@@ -1,0 +1,81 @@
+package com.example.nursetestmanagement.databases;
+
+import android.content.Context;
+
+import androidx.lifecycle.LiveData;
+import androidx.lifecycle.MutableLiveData;
+
+import com.example.nursetestmanagement.models.Test;
+
+
+import java.util.List;
+
+public class TestRepository {
+    private LiveData<List<Test>> tests;
+    private LiveData<Test> test;
+    private MutableLiveData<Long> insertTestId=new MutableLiveData<>();
+    private MutableLiveData<Integer> updateTestResult=new MutableLiveData<>();
+    private MutableLiveData<Integer> deleteTestResult=new MutableLiveData<>();
+    private TestPatientNurseDao testPatientNurseDao;
+    AppDatabase appDatabase;
+
+    public TestRepository(Context context){
+        appDatabase=AppDatabase.getInstance(context);
+        testPatientNurseDao=appDatabase.testPatientNurseDao();
+    }
+
+    public LiveData<List<Test>> getTestListByPatient(Long patientId){
+        this.tests=testPatientNurseDao.getAllTestsByPatient(patientId);
+        return this.tests;}
+    public void insert(Test test){asyncInsert(test);}
+    public void update(Test test){asyncUpdate(test);}
+    public void delete(Test... tests){asyncDelete(tests);}
+    public LiveData<Long> getInsertTestId(){
+        return insertTestId;
+    }
+    public LiveData<Integer> getUpdateResult(){return  updateTestResult;}
+    public LiveData<Test> getTestInfor(Long testId){return testPatientNurseDao.getTestInfor(testId);}
+    private void asyncInsert(final Test test){
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                try{
+                    insertTestId.postValue(testPatientNurseDao.insert(test));
+                }
+                catch (Exception e){
+                    insertTestId.postValue(-1l);
+                }
+            }
+        }).start();
+    }
+
+    private void asyncUpdate(final Test test){
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                try{
+                    testPatientNurseDao.update(test);
+                    updateTestResult.postValue(1);
+                }
+                catch (Exception e){
+                    updateTestResult.postValue(0);
+                }
+            }
+        }).start();
+    }
+
+    private void asyncDelete(final Test... tests){
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                try{
+                    testPatientNurseDao.delete(tests);
+                    deleteTestResult.postValue(1);
+                }
+                catch (Exception e){
+                    deleteTestResult.postValue(0);
+                }
+            }
+        }).start();
+    }
+}

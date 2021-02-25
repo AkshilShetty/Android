@@ -1,0 +1,85 @@
+package com.example.nursetestmanagement.userinterface.activities;
+
+import android.content.Intent;
+import android.content.SharedPreferences;
+import android.os.Bundle;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.TextView;
+
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.lifecycle.ViewModelProviders;
+
+import com.example.nursetestmanagement.R;
+import com.example.nursetestmanagement.models.Test;
+import com.example.nursetestmanagement.userinterface.viewModels.TestViewModel;
+
+
+public class UpdateTestInforActivity extends AppCompatActivity {
+
+    Button updateTest_bt;
+    EditText bplTest_et;
+    EditText bphTest_et;
+    EditText temperatureTest_et;
+    EditText nurseId_et;
+    EditText patientId_et;
+    EditText cbcTest_et;
+    TextView testId_tv;
+    TestViewModel testViewModel;
+    SharedPreferences getTestIdPre;
+    String getTestIdPreString;
+    Test test;
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_update_test_infor);
+
+        updateTest_bt=(Button)findViewById(R.id.updateTest_submit_bt);
+        bplTest_et=(EditText)findViewById(R.id.updateTest_bpl_et);
+        bphTest_et=(EditText)findViewById(R.id.updateTest_bph_et);
+        temperatureTest_et=(EditText)findViewById(R.id.updateTest_temperature_et);
+        nurseId_et=(EditText)findViewById(R.id.updateTest_nurseId_et);
+        patientId_et=(EditText)findViewById(R.id.updateTest_patientId_et);
+        testId_tv=(TextView) findViewById(R.id.updateTest_testId_tv);
+        cbcTest_et=(EditText)findViewById(R.id.updateTest_cbc_et);
+
+        testViewModel= ViewModelProviders.of(this).get(TestViewModel.class);
+        getTestIdPre=getSharedPreferences(String.valueOf(R.string.selectedTestSharedPreference),MODE_PRIVATE);
+        getTestIdPreString=getTestIdPre.getString(String.valueOf(R.string.selectedTestId),getTestIdPreString);
+
+        //Retrieve selected Test infor
+        testViewModel.getTestInforByTestId(Long.parseLong(getTestIdPreString))
+                    .observe(this,result->{
+                        test=result;
+                        testId_tv.setText(String.valueOf(test.get_testId()));
+                        patientId_et.setText(String.valueOf(test.get_patientId()));
+                        nurseId_et.setText(String.valueOf(test.get_nurseId()));
+                        bplTest_et.setText(test.get_BPL());
+                        bphTest_et.setText(test.get_BPH());
+                        temperatureTest_et.setText(String.valueOf(test.get_temperature()));
+                        cbcTest_et.setText(String.valueOf(test.get_cbc()));
+                    });
+
+        updateTest_bt.setOnClickListener(v->updateTestInfor());
+    }
+
+    private void updateTestInfor(){
+        test.set_patientId(Long.parseLong(patientId_et.getText().toString()));
+        test.set_nurseId(Long.parseLong(nurseId_et.getText().toString()));
+        if(temperatureTest_et.getText().toString().compareTo("")!=0){
+        test.set_temperature(Double.parseDouble(temperatureTest_et.getText().toString()));}
+        else {
+            test.set_temperature(0);
+        }
+        if(cbcTest_et.getText().toString().compareTo("")!=0){
+            test.set_cbc(Double.parseDouble(cbcTest_et.getText().toString()));}
+        else {
+            test.set_cbc(0);
+        }
+        test.set_BPL(bplTest_et.getText().toString());
+        test.set_BPH(bphTest_et.getText().toString());
+        testViewModel.update(test);
+        Intent intent=new Intent(UpdateTestInforActivity.this, ViewTestInforActivity.class);
+        startActivity(intent);
+    }
+}

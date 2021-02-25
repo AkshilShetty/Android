@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="com.example.nursetestmanagement">
+
+    <application
+        android:allowBackup="true"
+        android:icon="@mipmap/ic_launcher"
+        android:label="@string/app_name"
+        android:roundIcon="@mipmap/ic_launcher_round"
+        android:supportsRtl="true"
+        android:theme="@style/AppTheme">
+    <activity android:name=".userinterface.activities.UpdateTestInforActivity"></activity>
+    <activity android:name=".userinterface.activities.NurseProfileActivity" />
+    <activity android:name=".userinterface.activities.RegisterActivity" />
+    <activity android:name=".userinterface.activities.UpdateInforActivity" />
+    <activity android:name=".userinterface.activities.ViewTestInforActivity" />
+    <activity android:name=".userinterface.activities.TestActivity" />
+    <activity android:name=".userinterface.activities.PatientActivity" />
+    <activity android:name=".userinterface.activities.LoginActivity" />
+    <activity android:name=".userinterface.activities.MainActivity">
+        <intent-filter>
+            <action android:name="android.intent.action.MAIN" />
+
+            <category android:name="android.intent.category.LAUNCHER" />
+        </intent-filter>
+    </activity>
+</application>
+</manifest>
